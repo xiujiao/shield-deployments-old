@@ -13,3 +13,4 @@ jobs:
     - {release: shield, name: nginx}
     - {release: toolbelt, name: toolbelt}
     - {release: toolbelt, name: toolbelt-quick}
+    - {release: bolo, name: dbolo}

@@ -34,6 +34,8 @@ jobs:
     release: toolbelt
   - name: toolbelt-quick
     release: toolbelt
+  - name: dbolo
+    release: bolo
 name: aws-proto-shield
 networks:
 - name: shield
