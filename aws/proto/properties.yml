@@ -1,3 +1,11 @@
 ---
 meta:
   az: us-west-2a
+properties:
+  dbolo:
+    submission:
+      address: 10.4.1.65
+    collectors:
+      - { every: 20s, run: 'linux' }
+      - { every: 20s, run: 'httpd' }
+      - { every: 20s, run: 'process -n nginx -m nginx' }
