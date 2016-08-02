@@ -97,6 +97,8 @@ releases:
   sha1: 0ff09164d76223823cd30bd5592fcc6c58a2c28f
   url: https://bosh.io/d/github.com/cloudfoundry-community/toolbelt-boshrelease?v=3.2.10
   version: 3.2.10
+- name: bolo
+  version: latest
 resource_pools:
 - cloud_properties:
     availability_zone: us-west-2a
@@ -110,7 +112,7 @@ resource_pools:
     name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
     sha1: 58b80c916ad523defea9e661045b7fc700a9ec4f
     url: https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3262.4
-    version: 3262.4
+    version: track
 update:
   canaries: 1
   canary_watch_time: 3000-120000
