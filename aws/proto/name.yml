@@ -1,0 +1,4 @@
+---
+name: aws-proto-shield
+meta:
+  vault_prefix: secret/aws/proto/shield

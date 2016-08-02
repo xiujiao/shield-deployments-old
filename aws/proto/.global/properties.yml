@@ -1,0 +1,51 @@
+---
+properties:
+  databases:
+    address: (( grab jobs.shield.networks[0].static_ips[0] ))
+    databases:
+    - citext: true
+      name: shielddb
+      tag: shield
+    - citext: true
+      name: sessionsdb
+      tag: sessions
+    db_scheme: postgres
+    port: 5524
+    roles:
+    - name: shieldadmin
+      password: (( vault meta.vault_prefix "/db:password" ))
+      tag: admin
+    - name: shieldsessions
+      password: (( vault meta.vault_prefix "/sessionsdb:password" ))
+      tag: sessions
+
+  shield:
+    agent:
+      autoprovision: (( concat "https://" properties.shield.daemon.domain ))
+
+    daemon:
+      auth:
+        basic_user: shield
+        basic_password: (( vault meta.vault_prefix "/webui:password" ))
+        #oauth:
+        #  provider: (( param "Choose an oauth provider type - 'github' or 'cloudfoundry'" ))
+        #  key: (( param "Specify the client key used to authenticate with the oauth provider" ))
+        #  secret: (( param "Specify the client secret used to authenticate with the oauth provider " ))
+        #  authorization: {orgs: (( param "Specify the list of github orgs/UAA groups that should be able to access shield" ))}
+        #  sessions:
+        #    db:
+        #      name: (( grab properties.databases.databases.1.name ))
+        #      host: (( grab properties.databases.address ))
+        #      port: (( grab properties.databases.port ))
+        #      password: (( grab properties.databases.roles.1.password ))
+        #      username: (( grab properties.databases.roles.1.name ))
+
+      ssh_private_key: (( param "Specify the SSH private key that the daemon will use to talk to the agents" ))
+      database:
+        db: (( grab properties.databases.databases.0.name ))
+        host: (( grab properties.databases.address ))
+        password: (( grab properties.databases.roles.0.password ))
+        port: (( grab properties.databases.port ))
+        username: (( grab properties.databases.roles.0.name ))
+      domain: (( grab jobs.shield.networks[0].static_ips[0] ))
+      name: (( vault meta.vault_prefix "/daemon:name" ))

@@ -1,0 +1,120 @@
+compilation:
+  cloud_properties:
+    availability_zone: us-west-2a
+    ephemeral_disk:
+      size: 8192
+      type: gp2
+    instance_type: m3.large
+  network: shield
+  reuse_compilation_vms: true
+  workers: 4
+director_uuid: 606af3cd-790d-4752-88f2-c1db92732102
+disk_pools: []
+jobs:
+- instances: 1
+  name: shield
+  networks:
+  - name: shield
+    static_ips:
+    - 10.4.1.32
+  persistent_disk: 2048
+  resource_pool: small
+  templates:
+  - name: postgres
+    release: shield
+  - name: shield-daemon
+    release: shield
+  - name: shield-agent
+    release: shield
+  - name: agent-pgtools
+    release: shield
+  - name: nginx
+    release: shield
+  - name: toolbelt
+    release: toolbelt
+  - name: toolbelt-quick
+    release: toolbelt
+name: aws-proto-shield
+networks:
+- name: shield
+  subnets:
+  - cloud_properties:
+      security_groups:
+      - wide-open
+      subnet: subnet-10f36466
+    dns:
+    - 10.4.0.2
+    gateway: 10.4.1.1
+    range: 10.4.1.0/24
+    reserved:
+    - 10.4.1.2 - 10.4.1.3
+    - 10.4.1.4 - 10.4.1.31
+    - 10.4.1.48 - 10.4.1.254
+    static:
+    - 10.4.1.32 - 10.4.1.34
+  type: manual
+properties:
+  databases:
+    address: 10.4.1.32
+    databases:
+    - citext: true
+      name: shielddb
+      tag: shield
+    - citext: true
+      name: sessionsdb
+      tag: sessions
+    db_scheme: postgres
+    port: 5524
+    roles:
+    - name: shieldadmin
+      password: REDACTED
+      tag: admin
+    - name: shieldsessions
+      password: REDACTED
+      tag: sessions
+  shield:
+    agent:
+      autoprovision: https://10.4.1.32
+    daemon:
+      auth:
+        basic_password: REDACTED
+        basic_user: shield
+      database:
+        db: shielddb
+        host: 10.4.1.32
+        password: REDACTED
+        port: 5524
+        username: shieldadmin
+      domain: 10.4.1.32
+      name: REDACTED
+      ssh_private_key: REDACTED
+releases:
+- name: shield
+  sha1: 1c8116361740eeadd4af09aa25c99bff1b5fb634
+  url: https://bosh.io/d/github.com/starkandwayne/shield-boshrelease?v=6.3.0
+  version: 6.3.0
+- name: toolbelt
+  sha1: 0ff09164d76223823cd30bd5592fcc6c58a2c28f
+  url: https://bosh.io/d/github.com/cloudfoundry-community/toolbelt-boshrelease?v=3.2.10
+  version: 3.2.10
+resource_pools:
+- cloud_properties:
+    availability_zone: us-west-2a
+    ephemeral_disk:
+      size: 4096
+      type: gp2
+    instance_type: m3.medium
+  name: small
+  network: shield
+  stemcell:
+    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
+    sha1: 58b80c916ad523defea9e661045b7fc700a9ec4f
+    url: https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3262.4
+    version: 3262.4
+update:
+  canaries: 1
+  canary_watch_time: 3000-120000
+  max_in_flight: 50
+  serial: false
+  update_watch_time: 3000-120000
+
